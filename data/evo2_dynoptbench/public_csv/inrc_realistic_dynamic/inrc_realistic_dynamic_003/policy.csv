@@ -1,0 +1,2 @@
+fairness_weight,preference_weight,sequence_weight,overload_weight,over_coverage_weight,avoid_evening_after_night
+12.0,35.0,45.0,40.0,18.0,False

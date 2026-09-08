@@ -1,0 +1,10 @@
+job_id,operation_id,sequence_index,eligible_machines,processing_time,due_time,priority
+J1,J1O1,0,M2|M3,7,33,1
+J1,J1O2,1,M3|M1,9,33,1
+J1,J1O3,2,M1|M2,4,33,1
+J2,J2O1,0,M3|M1,10,37,1
+J2,J2O2,1,M1|M2,5,37,1
+J2,J2O3,2,M2|M3,7,37,1
+J3,J3O1,0,M1|M2,6,41,1
+J3,J3O2,1,M2|M3,8,41,1
+J3,J3O3,2,M3|M1,10,41,1

@@ -1,0 +1,46 @@
+{
+  "profile": "medium",
+  "config": {
+    "episodes": 3,
+    "cloud_machines": 24,
+    "cloud_jobs": 120,
+    "cloud_burst": 16,
+    "green_vehicles": 18,
+    "green_orders": 120,
+    "inrc_nurses": 180,
+    "inrc_days": 14,
+    "inrc_coverage_factor": 2.3
+  },
+  "outputs": [
+    {
+      "file": "data/evo2_dynoptbench/scaled_realistic_pilot/medium/cloud_scheduling_mo_medium_3episodes.jsonl",
+      "episodes": 3,
+      "updates": 30,
+      "stages": 33,
+      "memory_updates": 6,
+      "domain": [
+        "cloud_scheduling_multiobjective"
+      ]
+    },
+    {
+      "file": "data/evo2_dynoptbench/scaled_realistic_pilot/medium/green_vrp_mo_medium_3episodes.jsonl",
+      "episodes": 3,
+      "updates": 30,
+      "stages": 33,
+      "memory_updates": 6,
+      "domain": [
+        "green_vrp_multiobjective"
+      ]
+    },
+    {
+      "file": "data/evo2_dynoptbench/scaled_realistic_pilot/medium/inrc_realistic_dynamic_medium_3episodes.jsonl",
+      "episodes": 3,
+      "updates": 30,
+      "stages": 33,
+      "memory_updates": 6,
+      "domain": [
+        "inrc2"
+      ]
+    }
+  ]
+}

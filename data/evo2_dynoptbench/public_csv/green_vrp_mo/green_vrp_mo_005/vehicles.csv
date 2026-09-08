@@ -1,0 +1,6 @@
+id,capacity,emission_rate,available,shift_end
+V1,22,0.86,True,270
+V2,25,0.94,True,260
+V3,28,0.7,True,270
+V4,22,0.78,True,260
+V5,25,0.86,True,270

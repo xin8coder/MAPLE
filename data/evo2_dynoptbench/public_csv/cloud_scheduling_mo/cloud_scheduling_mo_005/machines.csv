@@ -1,0 +1,9 @@
+id,cpu,mem,energy_idle,energy_per_cpu,available,gpu
+M01,42,96,8.8,0.23,True,False
+M02,46,72,9.6,0.255,True,True
+M03,34,80,8.0,0.18,True,False
+M04,38,88,8.8,0.205,True,False
+M05,42,96,9.6,0.23,True,True
+M06,46,72,8.0,0.255,True,False
+M07,34,80,8.8,0.18,True,False
+M08,38,88,9.6,0.205,True,True

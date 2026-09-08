@@ -1,0 +1,11 @@
+{
+  "root": "data/evo2_dynoptbench/realistic_sources",
+  "sources": {
+    "olist_vrp": {
+      "zip": "data/evo2_dynoptbench/realistic_sources/olist_vrp/raw/olist-vrp-benchmark-main.zip",
+      "extract_root": "data/evo2_dynoptbench/realistic_sources/olist_vrp/extracted",
+      "inventory": "data/evo2_dynoptbench/realistic_sources/olist_vrp/inventory.json",
+      "file_count": 18
+    }
+  }
+}

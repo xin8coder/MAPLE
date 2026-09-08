@@ -1,0 +1,45 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+logs/
+outputs/
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+
+# Build products stay outside the clean LaTeX source directory.
+paper_outputs/.build/
+paper_outputs/*_build.txt
+paper_outputs/figure_export/
+
+# Manuscripts, presentation sources, and generated publication bundles.
+/paper/
+/paper_outputs/
+/release_artifacts/
+/docs/maple*/
+/docs/iclr*/
+*.tex
+*.bib
+*.sty
+*.bst
+*.ppt
+*.pptx
+*.pdf
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Anonymous submission metadata.
+CITATION.cff

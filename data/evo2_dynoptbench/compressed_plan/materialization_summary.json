@@ -1,0 +1,95 @@
+{
+  "materialized": [
+    {
+      "file": "data/evo2_dynoptbench/compressed_plan/cobench_exact_small_6episodes.jsonl",
+      "episodes": 6,
+      "updates": 30,
+      "benchmarks": [
+        "CO-Bench-Exact-Small"
+      ],
+      "domains": [
+        "cobench"
+      ],
+      "reference_types": [
+        "exact_optimum"
+      ]
+    },
+    {
+      "file": "data/evo2_dynoptbench/compressed_plan/fjsp_exact_small_6episodes.jsonl",
+      "episodes": 6,
+      "updates": 30,
+      "benchmarks": [
+        "FJSP-Exact-Small"
+      ],
+      "domains": [
+        "fjsp"
+      ],
+      "reference_types": [
+        "exact_optimum"
+      ]
+    },
+    {
+      "file": "data/evo2_dynoptbench/compressed_plan/inrc_realistic_dynamic_6episodes.jsonl",
+      "episodes": 6,
+      "updates": 60,
+      "benchmarks": [
+        "INRC-II-Dynamic-Rostering"
+      ],
+      "domains": [
+        "inrc2"
+      ],
+      "reference_types": [
+        "solver_best_known"
+      ]
+    },
+    {
+      "file": "data/evo2_dynoptbench/compressed_plan/green_vrp_mo_6episodes.jsonl",
+      "episodes": 6,
+      "updates": 60,
+      "benchmarks": [
+        "Green-Dynamic-VRP-MO"
+      ],
+      "domains": [
+        "green_vrp_multiobjective"
+      ],
+      "reference_types": [
+        "pareto_solver_best_known"
+      ],
+      "objectives": [
+        "distance",
+        "lateness",
+        "emission",
+        "disruption",
+        "priority_penalty"
+      ]
+    },
+    {
+      "file": "data/evo2_dynoptbench/compressed_plan/cloud_scheduling_mo_6episodes.jsonl",
+      "episodes": 6,
+      "updates": 60,
+      "benchmarks": [
+        "Dynamic-Cloud-Scheduling-MO"
+      ],
+      "domains": [
+        "cloud_scheduling_multiobjective"
+      ],
+      "reference_types": [
+        "pareto_solver_best_known"
+      ],
+      "objectives": [
+        "sla_violations",
+        "latency",
+        "energy",
+        "migration_disruption",
+        "load_imbalance"
+      ]
+    }
+  ],
+  "downloads": {
+    "olist_lfs_problem_instances": {
+      "pid_file": "logs/downloads/olist_lfs_problem_instances.pid",
+      "status": "background_running_or_resumable",
+      "target": "data/evo2_dynoptbench/realistic_sources/olist_vrp/lfs_clone/problem_instances.zip"
+    }
+  }
+}

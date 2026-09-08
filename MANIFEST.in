@@ -1,0 +1,16 @@
+include README.md
+include LICENSE
+include pyproject.toml
+recursive-include evo2 *.py *.md *.json
+recursive-include demo *.py *.html *.css *.js
+recursive-include scripts *.py
+recursive-include tests *.py
+prune logs
+prune outputs
+prune .pytest_cache
+prune paper
+prune paper_outputs
+prune release_artifacts
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude .DS_Store

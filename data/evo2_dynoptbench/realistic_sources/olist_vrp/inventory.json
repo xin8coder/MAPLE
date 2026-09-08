@@ -1,0 +1,27 @@
+{
+  "source": "NVlabs/olist-vrp-benchmark",
+  "repo_zip": "https://github.com/NVlabs/olist-vrp-benchmark/archive/refs/heads/main.zip",
+  "root": "data/evo2_dynoptbench/realistic_sources/olist_vrp/extracted",
+  "file_count": 18,
+  "suffix_counts": {
+    "<none>": 7,
+    ".png": 2,
+    ".ipynb": 1,
+    ".md": 2,
+    ".zip": 2,
+    ".py": 2,
+    ".cpp": 2
+  },
+  "nested_zips_unpacked": [
+    "failed:olist-vrp-benchmark-main/coordinates.zip:File is not a zip file",
+    "failed:olist-vrp-benchmark-main/problem_instances.zip:File is not a zip file"
+  ],
+  "interesting_files": [
+    "olist-vrp-benchmark-main/coordinates.zip",
+    "olist-vrp-benchmark-main/problem_instances.zip"
+  ],
+  "sample_text": {
+    "olist-vrp-benchmark-main/README.md": "# VRP Benchmark Based on Real-world Online-shopping Data\n\nThis repo introduces a benchmark for Vehicle Routing Problems (VRP), based on real-world e-commerce data by Olist.\nThe repo includes both an on-the-fly problem-generator, and a constant test-set of problems for reference.\n\n- [How to use](#how-to-use)\n  - [Generate new problems](#generate-new-random-problem-instances)\n  - [Load our test problems](#load-our-test-and-validation-problems)\n- [Background: VRP](#background-vrp)\n- [Why a new benchmark?](#why-a-new-benchmark)\n- [How we created the benchmark](#how-we-created-the-benchmark-from-real-data)\n  - [Locations](#locations-orders-and-depots)\n  - [Driving times](#costs-driving-times)\n- [How problem instances are generated](#how-to-generate-random-problem-instances)\n- [Data directory tree](#data-directory-tree)\n- [Cite us](#cite-us)\n\n<div style=\"text-align: center;\">\n<img src=\"Olist_based_VRP_dataset.png\" alt=\"VRP_dataset\" width=\"645\" height=\"450\">\n</div>\n\n<!-- ![VRP_dataset](Olist_",
+    "olist-vrp-benchmark-main/olist_processor/README.md": "## Olist dataset processor\n\nTo generate locations for customers and depots (sellers), we used `main_generate_orders_coordinates()` in `brasilian_data_processing.py`. This relies on the [Olist dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).\n\nTo calculate costs (driving durations), we used `calculate_distances.cpp` (for customer-customer driving durations) and `calculate_cross_distances.cpp` (for customer-depot driving durations). Both rely on the [OSRM package](https://github.com/Project-OSRM/osrm-backend).\n"
+  }
+}

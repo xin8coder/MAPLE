@@ -1,0 +1,170 @@
+#!/usr/bin/env python3
+"""Export reached-state and valid-horizon diagnostics for external anchors."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_SOURCES = (
+    ROOT / "outputs/paper_public_evaluation_20260906_persistent_restored/public_stage_rows.jsonl",
+)
+DEFAULT_OUT = ROOT / "logs/analysis/nldo_external_continuity_diagnostics_20260716"
+DEFAULT_TEX = ROOT / "release_artifacts/paper_table_exports/nldo_external_continuity_rows.tex"
+METHODS = (
+    ("Persistent ReAct", "persistent_react"),
+    ("ReAct", "react_tools"),
+    ("OptiMUS", "optimus"),
+    ("ORLM", "orlm"),
+    ("OptimAI", "optimai_2025"),
+    ("OR-LLM-Agent", "or_llm_agent_2025"),
+)
+EPISODES = tuple(f"NLDO-P{index:03d}" for index in range(1, 16))
+STAGES = tuple(range(1, 13))
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source", type=Path, action="append")
+    parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--paper-table", type=Path, default=DEFAULT_TEX)
+    return parser.parse_args()
+
+
+def parse_bool(value: Any) -> bool:
+    return str(value).strip().lower() in {"1", "true", "yes"}
+
+
+def load_rows(paths: list[Path]) -> dict[tuple[str, str, int], dict[str, Any]]:
+    rows: dict[tuple[str, str, int], dict[str, Any]] = {}
+    for path in paths:
+        with path.open(encoding="utf-8") as handle:
+            for line in handle:
+                row = json.loads(line)
+                method = str(row.get("method") or "")
+                episode_id = str(row.get("episode_id") or "")
+                stage = int(row.get("stage_index") or 0)
+                if method not in {key for _, key in METHODS} or episode_id not in EPISODES:
+                    continue
+                key = (method, episode_id, stage)
+                if key in rows:
+                    old = rows[key].get("hidden_evaluation") or {}
+                    new = row.get("hidden_evaluation") or {}
+                    if parse_bool(old.get("feasible")) != parse_bool(new.get("feasible")):
+                        raise ValueError(f"conflicting hidden feasibility for {key}")
+                rows[key] = row
+    return rows
+
+
+def summarize(rows: dict[tuple[str, str, int], dict[str, Any]]) -> list[dict[str, Any]]:
+    summary: list[dict[str, Any]] = []
+    for label, method in METHODS:
+        attempted = [
+            row
+            for (row_method, _, stage), row in rows.items()
+            if row_method == method and stage in STAGES
+        ]
+        reached_pass = sum(
+            parse_bool((row.get("mathematical_evaluation") or row.get("hidden_evaluation") or {}).get("feasible"))
+            for row in attempted
+        )
+        horizons: list[int] = []
+        for episode_id in EPISODES:
+            horizon = 0
+            for stage in (0, *STAGES):
+                row = rows.get((method, episode_id, stage))
+                if row is None or not parse_bool((row.get("hidden_evaluation") or {}).get("feasible")):
+                    break
+                horizon = stage
+            horizons.append(horizon)
+        prefix_cells = sum(horizons)
+        summary.append(
+            {
+                "method": label,
+                "method_key": method,
+                "attempted_updates": len(attempted),
+                "reached_feasible_updates": reached_pass,
+                "reached_feasibility": reached_pass / len(attempted) if attempted else 0.0,
+                "valid_prefix_cells": prefix_cells,
+                "total_update_cells": len(EPISODES) * len(STAGES),
+                "valid_prefix_rate": prefix_cells / (len(EPISODES) * len(STAGES)),
+                "expected_valid_horizon": prefix_cells / len(EPISODES),
+                "complete_trajectories": sum(horizon == len(STAGES) for horizon in horizons),
+                "episode_horizons": horizons,
+            }
+        )
+    return summary
+
+
+def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
+    fields = [
+        "method",
+        "method_key",
+        "attempted_updates",
+        "reached_feasible_updates",
+        "reached_feasibility",
+        "valid_prefix_cells",
+        "total_update_cells",
+        "valid_prefix_rate",
+        "expected_valid_horizon",
+        "complete_trajectories",
+        "episode_horizons",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for row in rows:
+            output = dict(row)
+            output["episode_horizons"] = json.dumps(output["episode_horizons"])
+            writer.writerow(output)
+
+
+def write_tex(path: Path, rows: list[dict[str, Any]]) -> None:
+    lines = [
+        "% Generated by scripts/analysis/export_nldo_external_continuity_diagnostics.py.",
+        r"\newcommand{\NLDOExternalContinuityRows}{%",
+    ]
+    for index, row in enumerate(rows):
+        if index % 2:
+            lines.append(r"\rowcolor{LiveOptBaselineRowB}")
+        lines.append(
+            f"{row['method']} & {row['attempted_updates']}/180 & "
+            f"{100.0 * row['reached_feasibility']:.1f}\\% & "
+            f"{row['valid_prefix_cells']}/180 & {row['expected_valid_horizon']:.2f} " + r"\\"
+        )
+    lines.append("}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main() -> None:
+    args = parse_args()
+    sources = list(args.source or DEFAULT_SOURCES)
+    summary = summarize(load_rows(sources))
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    write_csv(args.out_dir / "method_summary.csv", summary)
+    (args.out_dir / "summary.json").write_text(
+        json.dumps(
+            {
+                "protocol": "external_anchor_valid_prefix_and_reached_state_v1",
+                "scope": "15 episodes x 12 updates",
+                "sources": [str(path) for path in sources],
+                "methods": summary,
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    write_tex(args.paper_table, summary)
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()
